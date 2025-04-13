@@ -10,6 +10,24 @@ function copyEmailContent() {
   navigator.clipboard.writeText(text).then(() => alert("Email content copied!"));
 }
 
+ const wrapper = document.getElementById('wrapper');
+  const generateBtn = document.getElementById('generateBtn');
+  generateBtn.addEventListener('click', () => {
+    wrapper.classList.add('two-columns');
+  });
+
+//file upload check
+const fileInput = document.getElementById('imageInput');
+const fileNameDisplay= document.getElementById('fileName');
+
+fileInput.addEventListener('change', function() {
+  if(fileInput.files.length > 0) {
+    fileNameDisplay.textContent=`Selected: ${fileInput.files[0].name}`;}
+  else{
+    fileNameDisplay.textContent='No file selected.';}
+  });
+
+
 async function generateReply() {
   const emailInput = document.getElementById('emailInput');
   const imageInput = document.getElementById('imageInput');
@@ -21,7 +39,7 @@ async function generateReply() {
 
   let inputText = emailInput.value.trim();
 
-  // If no text is provided, check if an image is uploaded
+  // agar text absent hai, check if image is uploaded
   if (!inputText && imageInput?.files[0]) {
     inputText = await extractTextFromImage(imageInput.files[0]);
     if (inputText) {
@@ -32,7 +50,6 @@ async function generateReply() {
     }
   }
 
-  // If still no input, show warning
   if (!inputText) {
     output.innerHTML = "<p>Please enter some email content or upload a screenshot.</p>";
     return;
@@ -80,12 +97,12 @@ async function extractTextFromImage(file) {
     reader.onload = function () {
       const img = new Image();
       img.onload = function () {
-        // Use Tesseract to extract text
+        // tesseract extract text
         Tesseract.recognize(
           img,
-          'eng', // Language (use 'eng' for English)
+          'eng',
           {
-            logger: (m) => console.log(m), // Optional: log the progress
+            logger: (m) => console.log(m),
           }
         ).then(({ data: { text } }) => {
           resolve(text.trim());
