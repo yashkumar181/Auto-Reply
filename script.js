@@ -34,6 +34,10 @@ const wrapper = document.getElementById('wrapper');
    wrapper.classList.add('two-columns');
  });
 
+ function copyReply() {
+  const text = document.getElementById("output").innerText;
+  navigator.clipboard.writeText(text).then(() => alert("Reply copied to clipboard!"));
+ }
 //file upload check
 const fileInput = document.getElementById('imageInput');
 const fileNameDisplay= document.getElementById('fileName');
@@ -44,6 +48,7 @@ fileInput.addEventListener('change', function() {
  else{
    fileNameDisplay.textContent='No file selected.';}
  });
+
 
 
 async function generateReply() {
@@ -109,6 +114,9 @@ async function generateReply() {
  }
 }
 
+
+
+//extarct text from the ss
 async function extractTextFromImage(file) {
  return new Promise((resolve, reject) => {
    const reader = new FileReader();
@@ -135,11 +143,6 @@ async function extractTextFromImage(file) {
  });
 }
 
-function copyReply() {
- const text = document.getElementById("output").innerText;
- navigator.clipboard.writeText(text).then(() => alert("Reply copied to clipboard!"));
-}
-
 tsParticles.load("tsparticles", {
  fullScreen: { enable: true },
  particles: {
@@ -163,3 +166,73 @@ tsParticles.load("tsparticles", {
  },
  detectRetina: true
 });
+
+const CLIENT_ID = '807804883897-g78g4b3jk3e15frd37o7ffglnfdlio33.apps.googleusercontent.com';
+const API_KEY = 'AIzaSyBn1RVn4zYwaavswA_2hUxuLLQ__QVuLhY';
+const SCOPES = 'https://www.googleapis.com/auth/gmail.readonly  ';
+
+// Load and init Gmail API
+function handleClientLoad() {
+  gapi.load('client:auth2', initClient);
+}
+
+function initClient() {
+  gapi.client.init({
+    apiKey: API_KEY,
+    clientId: CLIENT_ID,
+    discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest'],
+    scope: SCOPES
+  });
+}
+
+// Sign-in
+function handleAuthClick() {
+  gapi.auth2.getAuthInstance().signIn().then(() => {
+    alert('Signed in with Gmail!');
+  });
+}
+
+// Fetch latest email content
+/*function listMessages() {
+  gapi.client.gmail.users.messages.list({
+    userId: 'me',
+    maxResults: 1,
+    q: '', // You can customize this query
+  }).then(response => {
+    const messages = response.result.messages;
+    if (!messages || messages.length === 0) {
+      alert("No messages found.");
+      return;
+    }
+
+    const messageId = messages[0].id;
+    return gapi.client.gmail.users.messages.get({
+      userId: 'me',
+      id: messageId,
+      format: 'full',
+    });
+  }).then(message => {
+    if (!message) return;
+
+    const parts = message.result.payload.parts;
+    let body = '';
+
+    if (parts && parts.length) {
+      for (const part of parts) {
+        if (part.mimeType === 'text/plain' && part.body.data) {
+          body = atob(part.body.data.replace(/-/g, '+').replace(/_/g, '/'));
+          break;
+        }
+      }
+    }
+
+    document.getElementById('emailInput').value = body || 'Could not extract email text.';
+  }).catch(error => {
+    console.error('Error retrieving email:', error);
+    alert('Failed to load email.');
+  });
+}*/
+
+// Initialize on load
+gapi.load('client:auth2', handleClientLoad);
+

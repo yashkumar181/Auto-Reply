@@ -7,6 +7,10 @@
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.1/tsparticles.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.0/dist/tesseract.min.js"></script>
+  
+<!-- Load Gmail API Libraries -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://apis.google.com/js/api.js"></script>
 </head>
 <body>
   <div id="tsparticles"></div>
@@ -19,6 +23,7 @@
       </span>
     </button>
   </div>
+
 
   <section class="wrapper" id="wrapper">
     <div class="card email-card">
@@ -51,6 +56,8 @@
       <textarea id="commentInput" placeholder="Add any extra info or context here..."></textarea>
 
       <button onclick="generateReply()" id="generateBtn">Generate Reply</button>
+      <button onclick="handleAuthClick()">Sign in with Gmail</button>
+
     </div>
     <div class="card reply-card">
 
@@ -64,6 +71,8 @@
       <div class="action-buttons hidden" id="actions">
         <button onclick="copyReply()">Copy Reply</button>
         <button onclick="generateReply()">Regenerate Reply</button>
+        <button onclick="sendGeneratedReply()">Send Reply via Gmail</button>
+
       </div>
     </div>
   </section>
