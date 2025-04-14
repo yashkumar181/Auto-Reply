@@ -1,3 +1,5 @@
+
+
 function toggleDarkMode() {
   const body = document.body;
   body.classList.toggle("dark-mode");
@@ -200,6 +202,7 @@ function handleAuthClick() {
 function sendGeneratedReply() {
   const replyText = document.getElementById("output").innerText.replace("AI Reply:", "").trim();
   const recipient = prompt("Enter recipient email address:");
+  
   const subject = prompt("Enter the email subject:");
 
   if (!recipient || !subject || !replyText) {
