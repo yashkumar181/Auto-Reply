@@ -200,6 +200,15 @@ function handleAuthClick() {
 
 //sending gmail
 function sendGeneratedReply() {
+
+  const authyesno = gapi.auth2.getAuthInstance();
+  if (!authyesno.isSignedIn.get()) {
+    alert("Please sign in to your Gmail account first.");
+    handleAuthClick(); 
+    return;  // aage kaam nahi karne dega jaltak sign in nahi hoga
+  }
+
+
   const replyText = document.getElementById("output").innerText.replace("AI Reply:", "").trim();
   const recipient = prompt("Enter recipient email address:");
   
