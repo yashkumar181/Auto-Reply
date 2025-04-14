@@ -210,21 +210,15 @@ function sendGeneratedReply() {
 
 
   const replyText = document.getElementById("output").innerText.replace("AI Reply:", "").trim();
-  const recipient = prompt("Enter recipient email address:");
-  
+  const recipient = prompt("Enter receiver email address:");
   const subject = prompt("Enter the email subject:");
 
   if (!recipient || !subject || !replyText) {
-    alert("Missing info: Please provide recipient, subject, and make sure a reply is generated.");
+    alert("Missing information: Please provide receiver gmail, subject, and make sure a reply is generated.");
     return;
   }
 
-  const email =
-    `To: ${recipient}\r\n` +
-    `Subject: ${subject}\r\n` +
-    `Content-Type: text/plain; charset="UTF-8"\r\n` +
-    `\r\n` +
-    `${replyText}`;
+  const email = `To: ${recipient}\r\n` + `Subject: ${subject}\r\n` +  `Content-Type: text/plain; charset="UTF-8"\r\n` + `\r\n` + `${replyText}`;
 
   // ye encoding karta hai... jsisse special characyers sahi place pe rahe
   //chatgpt suggested to avvoid saying gmail api might reject
