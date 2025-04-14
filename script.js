@@ -144,7 +144,6 @@ async function generateReply() {
 }
 
 
-
 //extarct text from the ss
 async function extractTextFromImage(file) {
  return new Promise((resolve, reject) => {
@@ -173,74 +172,32 @@ async function extractTextFromImage(file) {
 }
 
 
-const CLIENT_ID = '807804883897-3pg4aj4jhmvapg3bs68paknh4uci17d0.apps.googleusercontent.com';
-const API_KEY = 'AIzaSyA2K0XyHYaaEJC551CTg--5spIZ1yZbaB8';
-const SCOPES = 'https://www.googleapis.com/auth/gmail.send  ';
-
-// Load and init Gmail API
-function handleClientLoad() {
-  gapi.load('client:auth2', initClient);
-}
-
-function initClient() {
-  gapi.client.init({
-    apiKey: API_KEY,
-    clientId: CLIENT_ID,
-    discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest'],
-    scope: SCOPES
-  });
-}
-
-// Sign-in
-function handleAuthClick() {
-  gapi.auth2.getAuthInstance().signIn().then(() => {
-    alert('Signed in with Gmail!');
-  });
-}
-
 //sending gmail
-function sendGeneratedReply() {
 
-  const authyesno = gapi.auth2.getAuthInstance();
-  if (!authyesno.isSignedIn.get()) {
-    alert("Please sign in to your Gmail account first.");
-    handleAuthClick(); 
-    return;  // aage kaam nahi karne dega jaltak sign in nahi hoga
+  emailjs.init("uGk-AyTq4jC_2kDRM"); 
+
+
+  function sendGeneratedReply() {
+    const replyText = document.getElementById("output").innerText.replace("AI Reply:", "").trim();
+   // const senderEmail = document.getElementById('senderEmail').value.trim();
+    const receiverEmail = document.getElementById('receiverEmail').value.trim();
+  
+    if (!replyText || !receiverEmail) {
+      alert("Please ensure a reply is generated and both emails are filled out.");
+      return;
+    }
+  
+    emailjs.send("service_9najibj", "template_tj5yh3r", {
+      //from_email: senderEmail,
+      to_email: receiverEmail,
+      message: replyText
+    }).then(function (res) {
+      alert('Reply sent to recipient successfully!');
+    }, function (err) {
+      console.error(err);
+      alert('Failed to send email via EmailJS.');
+    });
   }
-
-
-  const replyText = document.getElementById("output").innerText.replace("AI Reply:", "").trim();
-  const recipient = prompt("Enter receiver email address:");
-  const subject = prompt("Enter the email subject:");
-
-  if (!recipient || !subject || !replyText) {
-    alert("Missing information: Please provide receiver gmail, subject, and make sure a reply is generated.");
-    return;
-  }
-
-  const email = `To: ${recipient}\r\n` + `Subject: ${subject}\r\n` +  `Content-Type: text/plain; charset="UTF-8"\r\n` + `\r\n` + `${replyText}`;
-
-  // ye encoding karta hai... jsisse special characyers sahi place pe rahe
-  //chatgpt suggested to avvoid saying gmail api might reject
-  const base64EncodedEmail = btoa(unescape(encodeURIComponent(email)))
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=+$/, '');
-
-  gapi.client.gmail.users.messages.send({
-    userId: 'me',
-    resource: {
-      raw: base64EncodedEmail,
-    },
-  }).then(() => {
-    alert("Email sent successfully!");
-  }).catch((err) => {
-    console.error("Failed to send email:", err);
-    alert("Failed to send email.");
-  });
-}
-
-
-// Initialize on load
-gapi.load('client:auth2', handleClientLoad);
+  
+  
 
