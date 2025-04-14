@@ -38,6 +38,33 @@ const wrapper = document.getElementById('wrapper');
   const text = document.getElementById("output").innerText;
   navigator.clipboard.writeText(text).then(() => alert("Reply copied to clipboard!"));
  }
+
+ 
+tsParticles.load("tsparticles", {
+  fullScreen: { enable: true },
+  particles: {
+    number: { value: 70 },
+    size: { value: 3 },
+    move: { enable: true, speed: 2, direction: "top" },
+    line_linked: { enable: false },
+    color: { value: ["#a78bfa", "#7dd3fc", "#f472b6", "#34d399"] },
+    opacity: { value: 0.7 },
+    shape: { type: "circle" }
+  },
+  interactivity: {
+    events: {
+      onhover: { enable: true, mode: "bubble" },
+      onclick: { enable: true, mode: "repulse" }
+    },
+    modes: {
+      bubble: { distance: 100, duration: 2, size: 6, opacity: 0.8 },
+      repulse: { distance: 120 }
+    }
+  },
+  detectRetina: true
+ });
+
+
 //file upload check
 const fileInput = document.getElementById('imageInput');
 const fileNameDisplay= document.getElementById('fileName');
@@ -143,33 +170,10 @@ async function extractTextFromImage(file) {
  });
 }
 
-tsParticles.load("tsparticles", {
- fullScreen: { enable: true },
- particles: {
-   number: { value: 70 },
-   size: { value: 3 },
-   move: { enable: true, speed: 2, direction: "top" },
-   line_linked: { enable: false },
-   color: { value: ["#a78bfa", "#7dd3fc", "#f472b6", "#34d399"] },
-   opacity: { value: 0.7 },
-   shape: { type: "circle" }
- },
- interactivity: {
-   events: {
-     onhover: { enable: true, mode: "bubble" },
-     onclick: { enable: true, mode: "repulse" }
-   },
-   modes: {
-     bubble: { distance: 100, duration: 2, size: 6, opacity: 0.8 },
-     repulse: { distance: 120 }
-   }
- },
- detectRetina: true
-});
 
-const CLIENT_ID = '807804883897-g78g4b3jk3e15frd37o7ffglnfdlio33.apps.googleusercontent.com';
-const API_KEY = 'AIzaSyBn1RVn4zYwaavswA_2hUxuLLQ__QVuLhY';
-const SCOPES = 'https://www.googleapis.com/auth/gmail.readonly  ';
+const CLIENT_ID = '807804883897-3pg4aj4jhmvapg3bs68paknh4uci17d0.apps.googleusercontent.com';
+const API_KEY = 'AIzaSyA2K0XyHYaaEJC551CTg--5spIZ1yZbaB8';
+const SCOPES = 'https://www.googleapis.com/auth/gmail.send  ';
 
 // Load and init Gmail API
 function handleClientLoad() {
@@ -192,46 +196,42 @@ function handleAuthClick() {
   });
 }
 
-// Fetch latest email content
-/*function listMessages() {
-  gapi.client.gmail.users.messages.list({
+//sending gmail
+function sendGeneratedReply() {
+  const replyText = document.getElementById("output").innerText.replace("AI Reply:", "").trim();
+  const recipient = prompt("Enter recipient email address:");
+  const subject = prompt("Enter the email subject:");
+
+  if (!recipient || !subject || !replyText) {
+    alert("Missing info: Please provide recipient, subject, and make sure a reply is generated.");
+    return;
+  }
+
+  const email =
+    `To: ${recipient}\r\n` +
+    `Subject: ${subject}\r\n` +
+    `Content-Type: text/plain; charset="UTF-8"\r\n` +
+    `\r\n` +
+    `${replyText}`;
+
+  const base64EncodedEmail = btoa(unescape(encodeURIComponent(email)))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
+
+  gapi.client.gmail.users.messages.send({
     userId: 'me',
-    maxResults: 1,
-    q: '', // You can customize this query
-  }).then(response => {
-    const messages = response.result.messages;
-    if (!messages || messages.length === 0) {
-      alert("No messages found.");
-      return;
-    }
-
-    const messageId = messages[0].id;
-    return gapi.client.gmail.users.messages.get({
-      userId: 'me',
-      id: messageId,
-      format: 'full',
-    });
-  }).then(message => {
-    if (!message) return;
-
-    const parts = message.result.payload.parts;
-    let body = '';
-
-    if (parts && parts.length) {
-      for (const part of parts) {
-        if (part.mimeType === 'text/plain' && part.body.data) {
-          body = atob(part.body.data.replace(/-/g, '+').replace(/_/g, '/'));
-          break;
-        }
-      }
-    }
-
-    document.getElementById('emailInput').value = body || 'Could not extract email text.';
-  }).catch(error => {
-    console.error('Error retrieving email:', error);
-    alert('Failed to load email.');
+    resource: {
+      raw: base64EncodedEmail,
+    },
+  }).then(() => {
+    alert("Email sent successfully!");
+  }).catch((err) => {
+    console.error("Failed to send email:", err);
+    alert("Failed to send email.");
   });
-}*/
+}
+
 
 // Initialize on load
 gapi.load('client:auth2', handleClientLoad);
