@@ -226,6 +226,8 @@ function sendGeneratedReply() {
     `\r\n` +
     `${replyText}`;
 
+  // ye encoding karta hai... jsisse special characyers sahi place pe rahe
+  //chatgpt suggested to avvoid saying gmail api might reject
   const base64EncodedEmail = btoa(unescape(encodeURIComponent(email)))
     .replace(/\+/g, '-')
     .replace(/\//g, '_')
