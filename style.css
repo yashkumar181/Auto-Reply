@@ -1,29 +1,31 @@
-
+/* ====== Root Variables: Theme colors, backgrounds, and elements ====== */
 :root {
-  --bg-light: linear-gradient(135deg, #fdf2f8, #e0f2fe);
-  --bg-dark: linear-gradient(135deg, #0f172a, #1e293b);
-  --text-light: #1a1a1a;
-  --text-dark: #f5f5f5;
+  --bg-light: linear-gradient(135deg, #fdf2f8, #e0f2fe); 
+  --bg-dark: linear-gradient(135deg, #0f172a, #1e293b); 
+  --text-light: #1a1a1a; 
+  --text-dark: #f5f5f5; 
   --card-light: rgba(255, 255, 255, 0.85);
-  --card-dark: rgba(30, 30, 30, 0.9);
-  --input-light: #ffffff;
-  --input-dark: #2c2c2c;
-  --border-light: #ddd;
+  --card-dark: rgba(30, 30, 30, 0.9); 
+  --input-light: #ffffff; 
+  --input-dark: #2c2c2c; 
+  --border-light: #ddd; 
   --border-dark: #444;
-  --primary: #6366f1;
+  --primary: #6366f1; 
 }
 
+/* ====== Global Reset ====== */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+/* ====== Base Body Styling ====== */
 body {
   font-family: 'Segoe UI', sans-serif;
   background: var(--bg-light);
   color: var(--text-light);
-  transition: background 0.4s, color 0.4s;
+  transition: 0.4s, color 0.4s;
   overflow-x: hidden;
   min-height: 100vh;
   position: relative;
@@ -32,11 +34,18 @@ body {
   align-items: center;
 }
 
+/* ====== Dark Mode Overrides ====== */
 body.dark-mode {
   background: var(--bg-dark);
   color: var(--text-dark);
 }
 
+body.dark-mode .hero-image,
+body.dark-mode .copy-icon {
+  filter: brightness(0) invert(0.9); /* Invert icons in dark mode */
+}
+
+/* ====== Background Particle Container ====== */
 #tsparticles {
   position: fixed;
   top: 0;
@@ -46,56 +55,62 @@ body.dark-mode {
   z-index: -1;
 }
 
+/* ====== Dark Mode Toggle Button Styling ====== */
 .dark-toggle {
   position: fixed;
   top: 20px;
   right: 20px;
-  z-index: 10;
+  z-index: 9999;
+  transition: all 0.3s ease;
 }
 
-.dark-toggle button {
-  background: #6366f1;
+#darkModeBtn {
+  width: 50px;
+  height: 50px;
   border: none;
-  overflow: hidden;
-  width: 50px;
-  height: 50px;
+  background: #ffffff;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  padding: 0;
-  transition: transform 0.3s ease, color 0.3s ease;
-}
-
-.icon-wrapper{
   display: flex;
-  transition: transform 0.4s ease-in-out;
-  width: 100px;
-}
-
-.icon{
-  width: 50px;
-  height: 50px;
-  font-size: 30px;
-  display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.dark-toggle button .icon-wrapper {
-  transform: translateX(0);
+/* ====== Icon Container for Toggle Button ====== */
+.icon-wrapper {
+  position: relative;
+  width: 28px;
+  height: 28px;
 }
 
-body.dark-mode .dark-toggle button .icon-wrapper {
-  transform: translateX(-50px);
+.icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+  font-size: 1.5rem;
 }
 
-.no-transition .dark-toggle button .icon-wrapper {
-  transition: none !important;
+.sun { opacity: 0; }
+.dark-mode .sun { opacity: 1; }
+.dark-mode .moon { opacity: 0; }
+
+/* ====== Dark Mode Button Specific Style ====== */
+.dark-mode #darkModeBtn {
+  background: #1e293b;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-.dark-toggle button:hover {
-  transform: scale(1.1);
-  text-shadow: 0 0 8px #f1c40f;
+#darkModeBtn:hover {
+  transform: scale(1.05);
+  text-shadow: 0 0 5px goldenrod;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
+/* ====== Main Layout Wrapper ====== */
 .wrapper {
   padding: 2rem;
   display: flex;
@@ -111,6 +126,7 @@ body.dark-mode .dark-toggle button .icon-wrapper {
   justify-content: space-between;
 }
 
+/* ====== Card Container Style ====== */
 .card {
   background: var(--card-light);
   backdrop-filter: blur(14px);
@@ -120,9 +136,10 @@ body.dark-mode .dark-toggle button .icon-wrapper {
   max-width: 600px;
   width: 100%;
   animation: fadeIn 0.7s ease;
-  transition: background 0.4s;
+  transition: 0.4s;
 }
 
+/* ====== Reply Card Hidden by Default ====== */
 .reply-card {
   opacity: 0;
   animation: none;
@@ -132,19 +149,22 @@ body.dark-mode .dark-toggle button .icon-wrapper {
   right: 0;
 }
 
+/* ====== Reply Card Visible in Two Column Mode ====== */
 .wrapper.two-columns .reply-card {
   opacity: 1;
   animation: fadeIn 0.7s ease;
-  transition: background 0.4s;
+  transition: 0.4s;
   transform: translateX(0) scale(1);
   pointer-events: auto;
   position: static;
 }
 
+/* ====== Dark Mode Card Style ====== */
 body.dark-mode .card {
   background: var(--card-dark);
 }
 
+/* ====== Hero Image Styling ====== */
 .hero-image {
   display: block;
   margin: 0 auto 1.5rem;
@@ -152,10 +172,12 @@ body.dark-mode .card {
   filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
 }
 
-input[type="file"]{
+/* ====== Hidden File Input and Custom Button ====== */
+input[type="file"] {
   display: none;
 }
-.custom-image-input{
+
+.custom-image-input {
   display: inline-block;
   cursor: pointer;
   margin-top: 1.5rem;
@@ -166,20 +188,31 @@ input[type="file"]{
   border-radius: 12px;
   background: var(--primary);
   color: white;
-  cursor: pointer;
-  transition: background 0.3s ease;
+  transition: 0.3s ease;
 }
 
 .custom-image-input:hover {
   background: #4f46e5;
 }
 
-#fileName{
+/* ====== Filename and Preview Styling ====== */
+#fileName {
   margin-top: 0.3rem;
   font-size: 0.97rem;
   color: var(--text-light);
 }
 
+#imagePreview {
+  margin-top: 1rem;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: block;
+}
+
+/* ====== Headings and Labels ====== */
 h1 {
   text-align: center;
   font-size: 2rem;
@@ -199,11 +232,13 @@ label {
   font-weight: 600;
 }
 
+/* ====== Textarea and Select Styles ====== */
 .textarea-container {
   position: relative;
 }
 
-textarea, select {
+textarea,
+select {
   width: 100%;
   padding: 1rem;
   font-size: 1rem;
@@ -231,6 +266,7 @@ textarea {
   height: 120px;
 }
 
+/* ====== Copy Icon on Textareas ====== */
 .copy-icon {
   position: absolute;
   top: 12px;
@@ -245,6 +281,7 @@ textarea {
   opacity: 1;
 }
 
+/* ====== Button Styling ====== */
 button {
   margin-top: 1.5rem;
   width: 100%;
@@ -255,29 +292,50 @@ button {
   background: var(--primary);
   color: white;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: 0.3s ease;
 }
 
 button:hover {
   background: #4f46e5;
 }
 
+/* ====== Output and Email Box Styling ====== */
 #output {
   margin-top: 1.5rem;
   padding: 1rem;
   background-color: #f0f2f5;
   border-radius: 12px;
   white-space: pre-wrap;
-  transition: background 0.3s;
+  transition: 0.3s;
 }
 
-body.dark-mode #output {
+#receiverEmail {
+  margin-top: 0.5rem;
+  padding: 1rem;
+  background-color: #f0f2f5;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  white-space: pre-wrap;
+  transition: 0.3s;
+}
+
+body.dark-mode #output,
+body.dark-mode #receiverEmail {
   background-color: #242424;
+  color: var(--text-dark);
 }
 
-.action-buttons {
+/* ====== Flex Row Utility Class ====== */
+.row {
   display: flex;
   gap: 1rem;
+  align-items: center;
+}
+
+/* ====== Action Button Styles ====== */
+.action-buttons {
+  display: flex;
+  flex-direction: column;
   margin-top: 1rem;
 }
 
@@ -286,6 +344,24 @@ body.dark-mode #output {
   padding: 0.8rem;
 }
 
+.email-input-container{
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.reply-icon{
+  transform: rotate(45deg);
+  width: 30px;
+  cursor: pointer;
+
+}
+
+body.dark-mode .reply-icon {
+  filter: brightness(0) invert(0.9); /* Invert icons in dark mode */
+}
+
+/* ====== Typing Animation (Reply Loading) ====== */
 .typing-dots {
   display: flex;
   justify-content: center;
@@ -301,108 +377,113 @@ body.dark-mode #output {
   animation: bounce 0.6s infinite alternate;
 }
 
-.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+.typing-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
 
-.hidden { display: none; }
+.hidden {
+  display: none;
+}
 
+/* ====== Animations ====== */
 @keyframes bounce {
-  from { transform: translateY(0); }
-  to { transform: translateY(-8px); }
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-8px);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-@media (max-width: 600px) {
-  .card { padding: 1.5rem; }
-  .hero-image { height: 80px; }
-}
-/* Medium screens: tablets */
-@media (max-width: 768px) {
+/* ====== Responsive Design: Tablet & Mobile ====== */
+@media (max-width: 820px) {
   .wrapper {
+    flex-direction: column !important;
+    gap: 1.2rem;
+    align-items: center;
+  }
+  .card {
     padding: 1.5rem;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
   }
-
-  .wrapper.two-columns {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  h1 {
-    font-size: 1.6rem;
-  }
-
-  .subtitle {
-    font-size: 0.9rem;
-  }
-
-  button {
-    font-size: 0.95rem;
-    padding: 0.75rem;
-  }
-
-  select,
-  textarea {
-    font-size: 0.95rem;
-    padding: 0.85rem;
-  }
-
-  .copy-icon {
-    width: 20px;
-    top: 10px;
-    right: 10px;
+  .hero-image {
+    height: 80px;
   }
 }
 
-/* Small screens: mobile phones */
-@media (max-width: 480px) {
-  .card {
-    padding: 1rem;
-    border-radius: 16px;
+/* ======== Responsive Design: ========== */
+@media only screen and (max-width: 400px) and (max-height: 900px) {
+  .wrapper {
+    flex-direction: column !important;
+    gap: 1.2rem;
+    align-items: stretch;
   }
 
-  .hero-image {
-    height: 60px;
+  .card,
+  .reply-card {
+    max-width: 100%;
+    position: static;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    animation: fadeIn 0.6s ease;
+  }
+
+  .wrapper.two-columns .reply-card {
+    position: static;
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+    animation: fadeIn 0.6s ease;
+  }
+
+  .reply-card {
+    margin-top: 1rem;
+  }
+
+  #darkModeBtn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .icon-wrapper {
+    width: 28px;
+    height: 28px;
   }
 
   h1 {
     font-size: 1.4rem;
   }
 
-  .action-buttons {
-    flex-direction: column;
+  button {
+    font-size: 1rem;
+    padding: 0.9rem;
   }
 
-  .action-buttons button {
-    width: 100%;
+  .custom-image-input {
     font-size: 0.9rem;
-    margin: 0;
-  }
-
-  .dark-toggle {
-    top: 12px;
-    right: 12px;
-  }
-
-  .dark-toggle button {
-    font-size: 1.2rem;
+    padding: 0.8rem 1rem;
   }
 
   textarea {
-    height: 100px;
+    font-size: 0.95rem;
+    padding: 0.9rem;
   }
 
-  #output{
-    margin-bottom: 2rem;
-  }
-
-  button {
-    padding: 0.7rem;
+  .copy-icon {
+    width: 22px;
   }
 }
